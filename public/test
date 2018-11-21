@@ -1,0 +1,8 @@
+<div style={{ height: 120 }}>
+  <Popover
+    id=&quotpopover-basic&quot
+    placement=&quotright&quot
+    positionLeft={200}
+    positionTop={50}
+    title=&quotPopover right&quot
+  >
