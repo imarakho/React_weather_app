@@ -12,17 +12,20 @@ class City extends React.Component {
     this.state = {city: ''};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleChange = (event) => {
     this.setState({city: event.target.value});
   }
+
   handleSubmit = (event) => {
     this.props._func(this.state.city);
     event.preventDefault();
   }
+  
   render() {
     return (
       <div>
-        <h3>Tap name of the city to get forecast:</h3>
+        <h3>Enter name of the city to get forecast:</h3>
           <Form onSubmit={this.handleSubmit}>
             <FormGroup>
               <Row>
@@ -60,13 +63,12 @@ class Favorite extends React.Component {
     event.preventDefault();
   }
 
-  add_favorite_city()
-{
+  add_favorite_city() {
     let fav = localStorage.getItem('favorites');
     let city = document.getElementById("add_favorite").value.toLowerCase();
     let url = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric&mode=json&&APPID=e77dd68c9d1dfe314070865567840739";
-   axios.get(url)
-   .then(res => {
+    axios.get(url)
+    .then(res => {
     let x = document.getElementById("favorites");
     var option = document.createElement("option");
     option.text = city;
@@ -123,30 +125,30 @@ class Favorite extends React.Component {
           )
         })
       }
-        return (          
-          <div>
-             <Label>Tap name of the city to add it to favorites:</Label>
-            <Row>
-              <Col sm={{ size: 6, offset: 2 }}>
-                <Input type="text" id="add_favorite" placeholder="Add city to favorites"/>
-              </Col>
-              <Col sm={{ size: 1 }}>
-                <Button color="info" onClick={this.add_favorite_city}>Add to favorites</Button>{' '}
-              </Col>
-            </Row>
-            <Label>Choose city from favorites and tap green button to see the forecast.</Label>
-            <Label>Tap red to remove chosen city from favorites.</Label>
-            <Row>
-              <Col sm={{ size: 6, offset: 2 }}>
-            <Input type="select" id="favorites" className="favorites">
-                  { map }
-            </Input>
+      return (          
+        <div>
+          <Label>Enter name of the city to add it to favorites:</Label>
+          <Row>
+            <Col sm={{ size: 6, offset: 2 }}>
+              <Input type="text" id="add_favorite" placeholder="Add city to favorites"/>
+            </Col>
+            <Col sm={{ size: 1 }}>
+              <Button color="info" onClick={this.add_favorite_city}>Add to favorites</Button>{' '}
+            </Col>
+          </Row>
+          <Label>Choose city from favorites and tap green button to see the forecast.</Label>
+          <Label>Tap red to remove chosen city from favorites.</Label>
+          <Row>
+            <Col sm={{ size: 6, offset: 2 }}>
+              <Input type="select" id="favorites" className="favorites">
+                { map }
+              </Input>
                 <br />
-                <Button onClick={this.getForecast} color="success">Get favorite</Button>{' '}
-                <Button onClick={this.removeFavorite} color="danger">Remove favorite</Button>{' '}
-              </Col>
-            </Row>
-          </div>
+              <Button onClick={this.getForecast} color="success">Get favorite</Button>{' '}
+              <Button onClick={this.removeFavorite} color="danger">Remove favorite</Button>{' '}
+            </Col>
+          </Row>
+        </div>
         );
       }
     }
@@ -176,51 +178,51 @@ class Favorite extends React.Component {
         this.createDay(ds.end + 16, ds.end + 24, ds.city, ds.days, 3);
       }
 
+      componentWillMount()
+      {
+        if (!this.state.setted) {
+          this.set_day();
+          this.setState({setted:true});
+        }
+      }
+
       createDay = (i, end, city, days, ch) => {
         let d = [];
-        if(days == null || city == null || end == null) return;
+
         for (; i < end; i++) {
           let img = "http://openweathermap.org/img/w/" + days[i].weather[0].icon + ".png";
             d.push( 
-            <Col sm="6" md={{ size: 5, offset: 1 }}>
-            <br />
-            <Card body className="weather_cards" class="card card-3 stacked--up">
-            <CardBody>
-            <CardTitle>Forecast on: {days[i].dt_txt} </CardTitle>
-            <CardImg top width="10%" src={img} alt="Card image cap"/>
-            <CardSubtitle>Weather is {days[i].weather[0].description} </CardSubtitle>
-            <CardText>{city} average temperature on {days[i].dt_txt}:{days[i].main.temp}°C.<br />
-              Max temperature:{days[i].main.temp_max}°C.<br />
-              Min temperature:{days[i].main.temp_min}°C.<br />
-              Humidity is about:{days[i].main.humidity}%.<br />
-              Wind speed is about {days[i].wind.speed} m/s.<br /></CardText>
-            </CardBody>
-            </Card>
+            <Col sm="6" md={{ size: 5, offset: 1 }} key={i}>
+              <br />
+                <Card body className="weather_cards">
+                  <CardBody align="center">
+                    <CardTitle>Forecast on: {days[i].dt_txt} </CardTitle>
+                      <CardImg top width="20%" src={img} alt="Card image cap"/>
+                      <CardSubtitle>Weather is {days[i].weather[0].description} </CardSubtitle>
+                      <CardText>{city} average temperature on {days[i].dt_txt}:{days[i].main.temp}°C.<br />
+                      Max temperature:{days[i].main.temp_max}°C.<br />
+                      Min temperature:{days[i].main.temp_min}°C.<br />
+                      Humidity is about:{days[i].main.humidity}%.<br />
+                      Wind speed is about {days[i].wind.speed} m/s.<br /></CardText>
+                  </CardBody>
+              </Card>
             </Col>
           );
         }
-        let p = {};
-          p.city = city;
-          p.days = days;
-          p.end = end;
         if(ch === 0)
           this.setState({day_0: d});
         else if(ch === 1)
           this.setState({day_1: d});
         else if(ch === 2)
           this.setState({day_2: d});
-        else if(ch ===3)
-        this.setState({day_3: d});
+        else if(ch === 3)
+          this.setState({day_3: d});
       }
 
       render() {
-        if (!this.state.setted) {
-          this.set_day();
-          this.setState({setted:true});
-        }
       return (
         <div >
-        <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+        <Tabs defaultActiveKey={1} id="uncontrolled-tab">
         <Tab eventKey={1} title="Today" label="Today">
                       <div id="day1">
                       <Container><Row>{this.state.day_0}</Row></Container></div>
@@ -249,37 +251,35 @@ class Favorite extends React.Component {
         }
       }
 
-      checkDate = (days) =>
-      {
+      checkDate = (days) => {
         let today = days[0].dt_txt.split('-')[2].slice(0, 2);
-        for (let i = 0; i < 8; i++)
-        {
+        let i;
+        for (i = 0; i < 8; i++)
           if(today !== days[i].dt_txt.split('-')[2].slice(0, 2))
             return i;
-        }
+        return i;
       }
       
-    get_weather = (city) =>
-    {
-     city = city.toLowerCase();
-    let url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric&mode=json&&APPID=e77dd68c9d1dfe314070865567840739";
-    axios.get(url)
+      get_weather = (city) => {
+      city = city.toLowerCase();
+      let url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric&mode=json&&APPID=e77dd68c9d1dfe314070865567840739";
+      axios.get(url)
       .then(res => {
-          let end = this.checkDate(res.data.list);
-          let p = {};
-          p.city = res.data.city.name;
-          p.end = end;
-          p.days = res.data.list;
-          this.result.createDay(0, end, res.data.city.name, res.data.list, 0);
-          this.result.createDay(end, end + 8, res.data.city.name, res.data.list, 1);
-          this.result.createDay(end + 8, end + 16, res.data.city.name, res.data.list, 2);
-          this.result.createDay(end + 16, end + 24, res.data.city.name, res.data.list, 2);
-          localStorage.setItem("days", JSON.stringify(p));  
-          this.setState({res: res.data.list})
+        let end = this.checkDate(res.data.list);
+        let p = {};
+        p.city = res.data.city.name;
+        p.end = end;
+        p.days = res.data.list;
+        this.result.createDay(0, end, res.data.city.name, res.data.list, 0);
+        this.result.createDay(end, end + 8, res.data.city.name, res.data.list, 1);
+        this.result.createDay(end + 8, end + 16, res.data.city.name, res.data.list, 2);
+        this.result.createDay(end + 16, end + 24, res.data.city.name, res.data.list, 3);
+        localStorage.setItem("days", JSON.stringify(p));  
+        this.setState({res: res.data.list})
       }).catch(error => {
         alert(error);
       });
-  }
+    }
     render() {
       return (
         <div>
