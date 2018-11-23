@@ -5,7 +5,6 @@ class City extends React.Component {
     constructor(props) {
     super(props);
     this.state = {city: ''};
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange = (event) => {

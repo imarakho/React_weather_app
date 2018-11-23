@@ -10,21 +10,18 @@ class Favorite extends React.Component {
       this.state = {
         fav: localStorage.getItem('favorites') !== null ? localStorage.getItem('favorites').split(",") : null,
       };
-      this.handleChange = this.handleChange.bind(this);
-      this.getForecast = this.getForecast.bind(this);
-      this.removeFavorite = this.removeFavorite.bind(this);
     }
   
-    handleChange(event) {
+    handleChange = (event) => {
       this.setState({city: event.target.value});
     }
   
-    getForecast(event) {
+    getForecast = (event) => {
       this.props._func(document.getElementById("favorites").value);
       event.preventDefault();
     }
   
-    add_favorite_city() {
+    add_favorite_city = () => {
       let fav = localStorage.getItem('favorites');
       let city = document.getElementById("add_favorite").value.toLowerCase();
       let url = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=metric&mode=json&&APPID=e77dd68c9d1dfe314070865567840739";
@@ -59,7 +56,7 @@ class Favorite extends React.Component {
   });
   }
 
-  removeFavorite(event) {
+  removeFavorite = (event) => {
     if(localStorage.getItem('favorites') === null)
     {
       alert("There is no favorites!");
