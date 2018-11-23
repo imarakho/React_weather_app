@@ -19,7 +19,7 @@ class All extends React.Component
   checkDate = (days) => {
     let today = days[0].dt_txt.split('-')[2].slice(0, 2);
     let i;
-    for (i = 0; i < 8; i++)
+    for (i = 1; i < 8; i++)
       if(today !== days[i].dt_txt.split('-')[2].slice(0, 2))
         return i;
     return i;

@@ -51,7 +51,7 @@ class Result extends React.Component
                     <CardTitle>Forecast on: {days[i].dt_txt} </CardTitle>
                       <CardImg top width="20%" src={img} alt="Card image cap"/>
                       <CardSubtitle>Weather is {days[i].weather[0].description} </CardSubtitle>
-                      <CardText>{city} average temperature on {days[i].dt_txt}:{days[i].main.temp}°C.<br />
+                      <CardText>{city} average temperature:{days[i].main.temp}°C.<br />
                       Max temperature:{days[i].main.temp_max}°C.<br />
                       Min temperature:{days[i].main.temp_min}°C.<br />
                       Humidity is about:{days[i].main.humidity}%.<br />
